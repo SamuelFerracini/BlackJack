@@ -3,6 +3,7 @@ package blackjack.entities;
 import java.util.*;
 
 public class Baralho {
+
     private ArrayList<Carta> baralho;
 
     public Baralho() {
@@ -12,13 +13,13 @@ public class Baralho {
         int tempValor;
         for (String valor : numeros) {
             for (String naipe : naipes) {
-                if(valor.contains("V") || valor.contains("D") || valor.contains("R")){
-                    tempValor =  10;
-                }else if(valor.contains("A")){
+                if (valor.contains("V") || valor.contains("D") || valor.contains("R")) {
+                    tempValor = 10;
+                } else if (valor.contains("A")) {
                     tempValor = 1;
-                }else{
+                } else {
                     tempValor = Integer.parseInt(valor);
-                }                
+                }
                 cartas.add(new Carta(naipe, valor, tempValor));
             }
         }
@@ -26,21 +27,27 @@ public class Baralho {
         this.baralho = cartas;
     }
 
-     public void mostraBaralho(){
-        for(Carta carta : baralho){
+    public void mostraBaralho() {
+        for (Carta carta : baralho) {
             System.out.println(carta);
         }
         System.out.println(baralho.size());
     }
 
-     public void embaralhar(){
-         Collections.shuffle(baralho, new Random());
-     }
-    
-     
-     public Carta removeCarta(){
-         Carta carta = baralho.get(0); 
-         baralho.remove(0);
-         return carta;
-     }
+    public void embaralhar() {
+        Collections.shuffle(baralho, new Random());
+    }
+
+    public Carta removeCarta() {
+        Carta carta = baralho.get(0);
+        baralho.remove(0);
+        return carta;
+    }
+
+    public ArrayList<Carta> DistribuiCartas() {
+        ArrayList<Carta> cartas = new ArrayList<Carta>();
+        cartas.add(removeCarta());
+        cartas.add(removeCarta());
+        return cartas;
+    }
 }

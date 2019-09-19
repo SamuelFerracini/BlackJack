@@ -13,14 +13,8 @@ public class Aplication {
     public static void main(String[] args) {
         Baralho baralho = new Baralho( );
         baralho.embaralhar();
-        ArrayList<Carta> maoJogador = new ArrayList<Carta>();
-        maoJogador.add(baralho.removeCarta());
-        maoJogador.add(baralho.removeCarta());
-        Humano humano = new Humano(maoJogador, "Humano");
-        ArrayList<Carta> maoBot = new ArrayList<Carta>();
-        maoBot.add(baralho.removeCarta());
-        maoBot.add(baralho.removeCarta());
-        Bot bot = new Bot(maoBot);
+        Humano humano = new Humano(baralho.DistribuiCartas(), "Humano");
+        Bot bot = new Bot(baralho.DistribuiCartas());
         Jogo jogo = new Jogo(bot, humano, baralho);
 
     }
