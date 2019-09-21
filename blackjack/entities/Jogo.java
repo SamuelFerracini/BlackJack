@@ -15,50 +15,55 @@ public class Jogo {
 
     public Jogo(Jogador bot, Jogador humano, Baralho baralho) {
         Jogador jogador = sorteiaJogador(bot, humano);
-        int trigger;
+        int inverteJogador;
         if (jogador.equals(bot)) {
-            trigger = 1;
+            inverteJogador = 1;
         } else {
-            trigger = 2;
+            inverteJogador = 2;
         }
         System.out.println("O jogador selecionado para comecar foi o " + jogador.getNome());
         while (true) {
             if (humano.getParou() == true && bot.getParou() == true) {
-                System.out.println(humano.getSoma());
-                System.out.println(bot.getSoma());
-
+                mostraGanhador(humano, bot);
+                return;
             }
-            if (trigger % 2 == 0) {
-                if (humano.getParou()) {
-                    System.out.println("O humano parou com " + humano.getSoma());
-
-                    break;
-                }
-                if (jogada(humano, baralho)) {
-                    System.out.println("O humano estourou com " + humano.getSoma());
-                    break;
+            if (inverteJogador % 2 == 0) {
+                if (!humano.getParou()) {
+                    int resultadoJogada = jogada(humano, baralho);
+                    if (resultadoJogada == 1) {
+                        System.out.println("O humano bateu 21");
+                        return;
+                    }else if(resultadoJogada == 2){
+                        System.out.println("O Bot ganhou!");
+                        return;
+                    }
                 }
 
             } else {
-                if (bot.getParou()) {
-                    System.out.println("O bot perdeu com " + bot.getSoma());
-                    break;
-                }
-                if (jogada(bot, baralho)) {
-                    System.out.println("O bot estourou com " + bot.getSoma());
-                    break;
+                if (!bot.getParou()) {
+                    int resultadoJogada = jogada(bot, baralho);
+                    if (resultadoJogada == 1) {
+                        System.out.println("O bot bateu 21");
+                        return;
+                    }
+                    else if (resultadoJogada == 2) {
+                        System.out.println("O Humano ganhou!");
+                        return;
+                    }
                 }
             }
 
-            trigger++;
+            inverteJogador++;
         }
-
     }
 
-    public boolean jogada(Jogador jogador, Baralho baralho) {
+    public int jogada(Jogador jogador, Baralho baralho) {
         System.out.println("É a vez do " + jogador.getNome());
-        System.out.println("O valor de suas cartas é: " + jogador.getSoma());
-        System.out.println("Você deseja comprar uma carta do baralho? (1 - 0))");
+        if (jogador.getClass() != Bot.class) {
+            System.out.println("O valor de suas cartas é: " + jogador.getSoma());
+            System.out.println("Você deseja comprar uma carta do baralho? (1 - 0))");
+        }
+
         int resposta;
         Scanner sc = new Scanner(System.in);
         if (jogador.getNome() == "Bot") {
@@ -70,19 +75,37 @@ public class Jogo {
             Carta cartaSacada = baralho.removeCarta();
             jogador.adicionaCarta(cartaSacada);
             jogador.somaValores();
-            if (jogador.getSoma() > 21) {
-                return true;
+            if (jogador.getSoma() < 21) {
+                return 0;
             } else if (jogador.getSoma() == 21) {
-                return false;
+                return 1;
+            }else{
+                System.out.println("O jogador " + jogador.getNome() + " estourou com " + jogador.getSoma());
+                return 2;
             }
         }
         if (resposta == 0) {
             jogador.setParou(Boolean.TRUE);
+            System.out.println("O jogador " + jogador.getNome() + " parou!");
+            return 0;
         }
-        return false;
+        System.out.println("O jogador " + jogador.getNome() + " fez sua jogada");
+        return 0;
     }
 
     public void mostraSoma(Jogador jogador) {
         System.out.println("O valor da sua mão é de " + jogador.getSoma());
+    }
+
+    public void mostraGanhador(Jogador jogador1, Jogador jogador2) {
+        System.out.println(jogador1.getNome() + " " + jogador1.getSoma());
+        System.out.println(jogador2.getNome() + " " + jogador2.getSoma());
+        if (jogador1.getSoma() > jogador2.getSoma()) {
+            System.out.println("O jogador " + jogador1.getNome() + " ganhou!! com " + jogador1.getSoma());
+        } else if (jogador1.getSoma() < jogador2.getSoma()) {
+            System.out.println("O jogador " + jogador2.getNome() + " ganhou!!" + jogador2.getSoma());
+        } else {
+            System.out.println("Empate!!");
+        }
     }
 }

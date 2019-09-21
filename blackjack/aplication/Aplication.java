@@ -11,7 +11,7 @@ import java.util.List;
 public class Aplication {
 
     public static void main(String[] args) {
-        Baralho baralho = new Baralho( );
+        Baralho baralho = new Baralho();
         baralho.embaralhar();
         Humano humano = new Humano(baralho.DistribuiCartas(), "Humano");
         Bot bot = new Bot(baralho.DistribuiCartas());
